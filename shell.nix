@@ -11,6 +11,8 @@
 }: let
   # Manifest data
   manifest = pkgs.lib.importJSON ./package.json;
+
+  jetbrains-mono = pkgs.google-fonts.override {fonts = ["JetBrainsMono"];};
 in
   pkgs.stdenv.mkDerivation {
     name = "${manifest.name}-shell";
@@ -47,8 +49,8 @@ in
       alias scripts='jq ".scripts" package.json'
 
       printf "Copying necessary fonts\n"
-      cp "${
-        pkgs.google-fonts.override {fonts = ["JetBrainsMono"];}
-      }/share/fonts/truetype/JetBrainsMono[wght].ttf" ./src/app/JetBrainsMono.ttf
+      cp                                                                 \
+        "${jetbrains-mono}/share/fonts/truetype/JetBrainsMono[wght].ttf" \
+        ./src/app/JetBrainsMono.ttf
     '';
   }

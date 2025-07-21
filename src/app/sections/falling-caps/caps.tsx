@@ -4,7 +4,6 @@ import { Float, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Euler, Vector3 } from "three";
 import { useThree } from "@react-three/fiber";
-import { getTimeline } from "../../../lib/utils";
 
 type GLTFResult = GLTF & {
   nodes: {

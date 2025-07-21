@@ -11,38 +11,52 @@
 }: let
   # Manifest data
   manifest = pkgs.lib.importJSON ./package.json;
+
+  # Source code
+  source = ./.;
+
+  # JetBrains Mono font for local font provision
+  jetbrains-mono = pkgs.google-fonts.override {fonts = ["JetBrainsMono"];};
 in
-  pkgs.mkYarnPackage {
-    name = manifest.name;
+  pkgs.stdenv.mkDerivation {
+    pname = manifest.name;
     version = manifest.version;
 
     # Sauce
-    src = ./.;
+    src = source;
 
-    # Yarn lock evals
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+    nativeBuildInputs = [
+      pkgs.nodejs_22
+      pkgs.pnpm.configHook
+    ];
 
     # Override when necessary
     NEXT_PUBLIC_SITE_URL = "https://gate.oss.uzinfocom.uz";
 
     buildPhase = ''
-      ls -la ./deps/gatesite
-
       # Copy necessary fonts
-      cp "${
-        pkgs.google-fonts.override {fonts = ["JetBrainsMono"];}
-      }/share/fonts/truetype/JetBrainsMono[wght].ttf" ./deps/gatesite/src/app/JetBrainsMono.ttf
+      cp                                                                 \
+        "${jetbrains-mono}/share/fonts/truetype/JetBrainsMono[wght].ttf" \
+        ./src/app/JetBrainsMono.ttf
 
-      # Build the app
-      yarn build
+      # Build the package
+      pnpm build
     '';
 
     installPhase = ''
+      # Create output directory
       mkdir -p $out
+
+      # Move all contents
       cp -r ./out $out
     '';
+
+    pnpmDeps = pkgs.pnpm.fetchDeps {
+      pname = manifest.name;
+      version = manifest.version;
+      src = source;
+      hash = "sha256-BDnJWgVMaLo5m4SCpbkfSwqxewRXzCxz7OIv1mK7rQg=";
+    };
 
     meta = with pkgs.lib; {
       homepage = "https://gate.oss.uzinfocom.uz";
