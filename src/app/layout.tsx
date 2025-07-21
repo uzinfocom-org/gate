@@ -1,15 +1,7 @@
 import "./css/global.scss";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
 import { siteOrigin } from "~/lib/constants";
-import { Analytics } from "@vercel/analytics/react";
-
-// const jetBrainsMono = JetBrains_Mono({
-//   weight: "400",
-//   subsets: ["latin"],
-//   fallback: ["var(--font-system)"],
-// });
 
 // Nix build fix
 const jetBrainsMono = localFont({
@@ -78,8 +70,6 @@ export default function RootLayout({
       }}
     >
       <body>{children}</body>
-
-      <Analytics />
     </html>
   );
 }
