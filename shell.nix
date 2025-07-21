@@ -18,6 +18,7 @@ in
     buildInputs = with pkgs; [
       # Package managers
       yarn
+      yarn2nix
 
       # Runtime engines
       nodejs_22
@@ -44,5 +45,10 @@ in
 
       printf "Adding necessary aliases\n"
       alias scripts='jq ".scripts" package.json'
+
+      printf "Copying necessary fonts\n"
+      cp "${
+        pkgs.google-fonts.override {fonts = ["JetBrainsMono"];}
+      }/share/fonts/truetype/JetBrainsMono[wght].ttf" ./src/app/JetBrainsMono.ttf
     '';
   }

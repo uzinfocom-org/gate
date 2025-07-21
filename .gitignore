@@ -36,7 +36,10 @@ yarn-error.log*
 next-env.d.ts
 
 # nix
-/result/
+result/
 
 # direnv
 .direnv
+
+# generated fonts
+src/app/JetBrainsMono.ttf

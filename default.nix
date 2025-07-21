@@ -27,11 +27,22 @@ in
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
 
-    # Output everything
-    distPhase = "true";
-
     # Override when necessary
     NEXT_PUBLIC_SITE_URL = "https://gate.oss.uzinfocom.uz";
+
+    preBuildPhase = ''
+      cp "${
+        pkgs.google-fonts.override {fonts = ["JetBrainsMono"];}
+      }/share/fonts/truetype/JetBrainsMono[wght].ttf" ./src/app/JetBrainsMono.ttf
+    '';
+
+    buildPhase = ''
+      yarn build
+    '';
+
+    installPhase = ''
+      cp -r ./out $out
+    '';
 
     meta = with pkgs.lib; {
       homepage = "https://gate.oss.uzinfocom.uz";

@@ -5,11 +5,18 @@ import { JetBrains_Mono } from "next/font/google";
 import { siteOrigin } from "~/lib/constants";
 import { Analytics } from "@vercel/analytics/react";
 
-const jetBrainsMono = JetBrains_Mono({
-  weight: "400",
-  subsets: ["latin"],
+// const jetBrainsMono = JetBrains_Mono({
+//   weight: "400",
+//   subsets: ["latin"],
+//   fallback: ["var(--font-system)"],
+// });
+
+// Nix build fix
+const jetBrainsMono = localFont({
+  src: './JetBrainsMono.ttf',
   fallback: ["var(--font-system)"],
-});
+  preload: true,
+})
 
 const basementGrotesque = localFont({
   src: [
