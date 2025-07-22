@@ -1,49 +1,28 @@
 {
   "name": "gatesite",
-  "private": true,
-  "version": "0.1.6",
-  "browserslist": "defaults, not ie <= 11",
+  "version": "1.0.0",
+  "description": "Gate website for Uzinfocom Open Source resources",
+  "main": "src/js/index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "build:analyze": "cross-env ANALYZE=true yarn build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "parcel src/index.html --open",
+    "clean": "rm -rf dist/*",
+    "build:parcel": "parcel build src/index.html --no-content-hash --no-minify --no-source-maps --public-url ./",
+    "build": "npm run clean && npm run build:parcel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/uzinfocom-org/gate.git"
+  },
+  "keywords": [],
+  "author": "Uzinfocom Open Source",
+  "license": "MIT",
+  "homepage": "http://gate.oss.uzinfocom.uz",
+  "bugs": {
+    "url": "https://github.com/uzinfocom-org/gate/issues"
   },
   "dependencies": {
-    "@bsmnt/scrollytelling": "^0.3.0",
-    "@react-three/drei": "^9.65.3",
-    "@react-three/fiber": "^8.12.0",
-    "@types/three": "^0.150.1",
-    "@vercel/analytics": "^1.0.0",
-    "canvas-confetti": "^1.6.0",
-    "clsx": "^1.2.1",
-    "gsap": "^3.11.5",
-    "leva": "^0.9.34",
-    "next": "^13.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-merge-refs": "^1.1.0",
-    "sharp": "^0.32.0",
-    "three": "^0.151.3",
-    "zustand": "^4.3.7",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.23.0",
-    "eslint-config-next": "^12.0.8",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-react": "7.31.8",
-    "eslint-config-turbo": "latest"
-  },
-  "devDependencies": {
-    "@next/bundle-analyzer": "13.3.0",
-    "@types/canvas-confetti": "^1.6.0",
-    "@types/node": "24.0.15",
-    "cross-env": "^7.0.3",
-    "sass": "1.62.0",
-    "tsconfig": "*",
-    "typescript": "5.0.4"
+    "gsap": "^3.6.0",
+    "parcel-bundler": "^1.12.4",
+    "splitting": "^1.0.6"
   }
 }

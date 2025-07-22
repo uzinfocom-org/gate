@@ -14,9 +14,6 @@
 
   # Source code
   source = ./.;
-
-  # JetBrains Mono font for local font provision
-  jetbrains-mono = pkgs.google-fonts.override {fonts = ["JetBrainsMono"];};
 in
   pkgs.stdenv.mkDerivation {
     pname = manifest.name;
@@ -30,15 +27,7 @@ in
       pkgs.pnpm.configHook
     ];
 
-    # Override when necessary
-    NEXT_PUBLIC_SITE_URL = "https://gate.oss.uzinfocom.uz";
-
     buildPhase = ''
-      # Copy necessary fonts
-      cp                                                                 \
-        "${jetbrains-mono}/share/fonts/truetype/JetBrainsMono[wght].ttf" \
-        ./src/app/JetBrainsMono.ttf
-
       # Build the package
       pnpm build
     '';
@@ -48,14 +37,14 @@ in
       mkdir -p $out
 
       # Move all contents
-      cp -r ./out $out
+      cp -r ./dist/* $out
     '';
 
     pnpmDeps = pkgs.pnpm.fetchDeps {
       pname = manifest.name;
       version = manifest.version;
       src = source;
-      hash = "sha256-BDnJWgVMaLo5m4SCpbkfSwqxewRXzCxz7OIv1mK7rQg=";
+      hash = "sha256-FtXEVhiN7Nutxyc8W1BMwV1IHWZOZ+2bS1ZuwVv/+rc=";
     };
 
     meta = with pkgs.lib; {

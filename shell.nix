@@ -11,16 +11,13 @@
 }: let
   # Manifest data
   manifest = pkgs.lib.importJSON ./package.json;
-
-  jetbrains-mono = pkgs.google-fonts.override {fonts = ["JetBrainsMono"];};
 in
   pkgs.stdenv.mkDerivation {
     name = "${manifest.name}-shell";
 
     buildInputs = with pkgs; [
       # Package managers
-      yarn
-      yarn2nix
+pnpm
 
       # Runtime engines
       nodejs_22
@@ -35,9 +32,6 @@ in
       alejandra
     ];
 
-    # For local development
-    NEXT_PUBLIC_SITE_URL = "http://localhost:3000";
-
     shellHook = ''
       printf "Installing pnpm dependencies\n"
       yarn install
@@ -47,10 +41,5 @@ in
 
       printf "Adding necessary aliases\n"
       alias scripts='jq ".scripts" package.json'
-
-      printf "Copying necessary fonts\n"
-      cp                                                                 \
-        "${jetbrains-mono}/share/fonts/truetype/JetBrainsMono[wght].ttf" \
-        ./src/app/JetBrainsMono.ttf
     '';
   }
