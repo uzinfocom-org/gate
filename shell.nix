@@ -1,45 +1,31 @@
-{
-  pkgs ? let
-    lock = (builtins.fromJSON (builtins.readFile ./flake.lock)).nodes.nixpkgs.locked;
-    nixpkgs = fetchTarball {
-      url = "https://github.com/nixos/nixpkgs/archive/${lock.rev}.tar.gz";
-      sha256 = lock.narHash;
-    };
-  in
-    import nixpkgs {overlays = [];},
-  ...
-}: let
-  # Manifest data
-  manifest = pkgs.lib.importJSON ./package.json;
+flake:
+{ pkgs, ... }:
+let
+  # Hostplatform system
+  system = pkgs.hostPlatform.system;
+
+  # Production package
+  base = flake.packages.${system}.default;
 in
-  pkgs.stdenv.mkDerivation {
-    name = "${manifest.name}-shell";
+pkgs.mkShell {
+  inputsFrom = [ base ];
 
-    buildInputs = with pkgs; [
-      # Package managers
-pnpm
+  packages = with pkgs; [
+    # Nix
+    nixd
+    statix
+    deadnix
+    alejandra
+  ];
 
-      # Runtime engines
-      nodejs_22
+  shellHook = ''
+    printf "Installing pnpm dependencies\n"
+    yarn install
 
-      # Nextjs dependencies
-      vips
+    printf "Adding node_modules to PATH\n"
+    export PATH="$PWD/node_modules/.bin/:$PATH"
 
-      # Nix
-      nixd
-      statix
-      deadnix
-      alejandra
-    ];
-
-    shellHook = ''
-      printf "Installing pnpm dependencies\n"
-      yarn install
-
-      printf "Adding node_modules to PATH\n"
-      export PATH="$PWD/node_modules/.bin/:$PATH"
-
-      printf "Adding necessary aliases\n"
-      alias scripts='jq ".scripts" package.json'
-    '';
-  }
+    printf "Adding necessary aliases\n"
+    alias scripts='jq ".scripts" package.json'
+  '';
+}
